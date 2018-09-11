@@ -1,0 +1,259 @@
+@charset 'utf-8';
+
+// ===========================================================
+// ==[ yoncetheme.com ]=======================================
+// ===========================================================
+
+@function str-replace($string, $search, $replace: '') {
+  $index: str-index($string, $search);
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace +
+    str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+  @return $string;
+}
+
+@function svg-url($svg) {
+
+  $encoded: '';
+  $slice: 2000;
+  $index: 0;
+  $loops: ceil(str-length($svg)/$slice);
+  @for $i from 1 through $loops {
+    $chunk: str-slice($svg, $index, $index + $slice - 1);
+    $chunk: str-replace($chunk, '"', '\'');
+    $chunk: str-replace($chunk, '<', '%3C');
+    $chunk: str-replace($chunk, '>', '%3E');
+    $chunk: str-replace($chunk, '&', '%26');
+    $chunk: str-replace($chunk, '#', '%23');
+    $encoded: #{$encoded}#{$chunk};
+    $index: $index + $slice;
+  }
+  @return url("data:image/svg+xml;charset=utf8,#{$encoded}");
+}
+
+@import 'dank-mono';
+
+$black: #1c1c1c;
+$gray: #2F2F2F;
+$pink: #FC4384;
+$white: #FFFFFF;
+$off-white: #d4d4d4;
+$teal: #00A7AA;
+$cyan: #37E5E7;
+$purple: #A06FCA;
+
+html { box-sizing: border-box; }
+
+* {
+  &,
+  &::before,
+  &::after { box-sizing: inherit; }
+}
+
+* { margin: 0; padding: 0; }
+
+@viewport { width: device-width; }
+
+:focus {
+  outline: thin solid $pink;
+  outline-offset: .25rem;
+}
+
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+	font-family: "omnes-pro", "system", Helvetica, Arial, sans-serif;
+	background-color: $black;
+	color: $white;
+	font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6,
+code, kbd, pre, samp, tt {
+  font-weight: normal;
+}
+
+.twitter-follow-button {
+	margin-top: 1rem;
+	@media screen and (min-width: 800px) {
+		margin-top: 0;
+		vertical-align: middle;
+		float: right;
+	}
+}
+
+header {
+	margin-top: -11.5rem;
+	text-align: center;
+	font-size: 1rem;
+	> :nth-child(2) {
+		font-size: 1.3rem;
+    margin: 1rem 0;
+	}
+}
+
+main {
+  margin: 5rem auto 0;
+  width: 90vw;
+	max-width: 60rem;
+	@media screen and (min-width: 800px) {
+		width: 80vw;
+		margin-top: 3rem;
+	}
+}
+
+footer {
+  margin: 1rem auto;
+  width: 90vw;
+	@media screen and (min-width: 800px) {
+		width: 80vw;
+	}
+}
+
+p,
+ul {
+	line-height: 1.5;
+}
+
+a {
+	color: $pink;
+  text-decoration: none;
+  position: relative;
+  z-index: 0;
+  &:hover, &:focus {
+		opacity: .7;
+  }
+}
+
+h2 {
+	margin: 0;
+	display: inline-block;
+	position: relative;
+	z-index: 0;
+	margin: 2rem 0 2rem 0;
+	&:last-of-type { margin-bottom: 0; }
+	&::before {
+    content: '';
+    left: 0;
+    bottom: 4px;
+    background-color: $pink;
+    height: 8px;
+    width: 90px;
+    display: block;
+    position: absolute;
+    z-index: -1;
+	}
+	@media screen and (min-width: 800px) {
+		margin-left: -2rem;
+	}
+
+}
+
+h3 { margin: 1rem 0; }
+
+.button {
+	position: relative;
+    width: 250px;
+    padding: 8px 16px;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 3px solid #333;
+    box-shadow: inset 3px 3px 0 $white;
+    background-color: $pink;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.button:hover {
+	cursor: pointer;
+	background-color: rgb(231, 213, 73);
+	box-shadow: inset 3px 3px 0 #fff, 3px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+li {
+	padding-left: 1.2rem;
+	position: relative;
+	list-style-type: none;
+	margin: .5em 0;
+	vertical-align: middle;
+	&:before {
+		content: '';
+		background-image: svg-url('<svg width="10px" viewBox="0 0 10 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-162.000000, -2356.000000)" fill="#FC4384" fill-rule="nonzero"><g transform="translate(162.000000, 2356.000000)"><rect x="0" y="0" width="5" height="5"></rect><rect x="5" y="5" width="5" height="5"></rect><rect x="0" y="10" width="5" height="5"></rect></g></g></g></svg>');
+		left: 3px;
+		top: 6px;
+		position: absolute;
+		width: 10px;
+		height: 15px;
+	}
+}
+
+code, kbd {
+	white-space: nowrap;
+	font-family: 'dm', 'Inconsolata', monospace;
+	color: $purple;
+}
+
+kbd {
+	padding: 3px 9px;
+	border-radius: 3px;
+	vertical-align: 1px;
+	background: transparent;
+	border: 1px solid rgba(255,255,255,0.8);
+	box-shadow: 0 2px 0 rgba(255,255,255,0.8);
+	margin-right: 8px;
+	margin-bottom: 5px;
+	display: inline-block;
+	margin-top: 5px;
+	font-size: .8em;
+}
+
+small {
+	display: inline-block;
+	text-align: center;
+	@media screen and (min-width: 800px) {
+		display: inline;
+		text-align: left;
+	}
+}
+
+
+/* github octocat icon */
+/* Original source from here: */
+/* https://github.com/tholman/github-corners */
+
+.github-corner:hover .octo-arm {
+	animation: octocat-wave 560ms ease-in-out;
+  }
+
+  @keyframes octocat-wave {
+	0%,
+	100% {
+	  transform: rotate(0);
+	}
+	20%,
+	60% {
+	  transform: rotate(-25deg);
+	}
+	40%,
+	80% {
+	  transform: rotate(10deg);
+	}
+  }
+
+  @media (max-width:500px) {
+	.github-corner:hover .octo-arm {
+	  animation: none;
+	}
+	.github-corner .octo-arm {
+	  animation: octocat-wave 560ms ease-in-out;
+	}
+  }
