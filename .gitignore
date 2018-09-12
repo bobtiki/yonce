@@ -13,3 +13,6 @@ npm-debug.log*
 
 # mac shit
 .DS_Store
+
+# submodules
+vscode
